@@ -16,7 +16,7 @@ type Problem struct {
 // run: go build . && ./quiz -csv=problems.csv
 func main() {
 	filename := flag.String("csv", "problems.csv", "a csv file in the format of 'question,answer'")
-	flag.Parse()
+	flag.Parse() // parse the command line into the defined flags
 
 	file, err := os.Open(*filename)
 	if err != nil {
