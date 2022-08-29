@@ -3,11 +3,12 @@ package filehelper
 import (
 	"context"
 	"fmt"
-	"github.com/hlthung/golang-learning/pkg/utils/testhelper"
 	"io/ioutil"
 	"os"
 	"path"
 	"testing"
+
+	"github.com/hlthung/golang-learning/pkg/utils/testhelper"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
