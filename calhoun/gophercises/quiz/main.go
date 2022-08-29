@@ -14,7 +14,8 @@ type Problem struct {
 	question, answer string
 }
 
-// run: go build . && ./quiz -csv=problems.csv -limit=2
+// Ex1 From https://github.com/gophercises/quiz
+// Run: go build . && ./quiz -csv=problems.csv -limit=2
 func main() {
 	filename := flag.String("csv", "problems.csv", "a csv file in the format of 'question,answer'")
 	timeLimit := flag.Int("limit", 30, "the time limit for the quiz in seconds")
