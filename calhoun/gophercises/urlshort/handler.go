@@ -1,8 +1,9 @@
 package urlshort
 
 import (
-	"gopkg.in/yaml.v3"
 	"net/http"
+
+	"gopkg.in/yaml.v3"
 )
 
 // MapHandler will return an http.HandlerFunc (which also
