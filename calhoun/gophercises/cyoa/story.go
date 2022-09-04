@@ -15,11 +15,30 @@ func init() {
 
 var tpl *template.Template
 
-func NewHandler(s Story) http.Handler {
-	return handler{s}
+// HandlerOption are used with the NewHandler function to
+// configure the http.Handler returned.
+type HandlerOption func(h *handler)
+
+// WithTemplate is an option to provide a custom template to
+// be used when rendering stories.
+func WithTemplate(t *template.Template) HandlerOption {
+	return func(h *handler) {
+		h.t = t
+	}
 }
 
-type handler struct{ s Story }
+func NewHandler(s Story, opts ...HandlerOption) http.Handler {
+	h := handler{s, tpl}
+	for _, opt := range opts {
+		opt(&h)
+	}
+	return h
+}
+
+type handler struct {
+	s Story
+	t *template.Template
+}
 
 func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimSpace(r.URL.Path)
@@ -29,7 +48,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path = path[1:]
 
 	if chapter, ok := h.s[path]; ok {
-		err := tpl.Execute(w, chapter)
+		err := h.t.Execute(w, chapter)
 		if err != nil {
 			log.Printf("%v", err)
 			http.Error(w, "Something went wrong...", http.StatusInternalServerError)
