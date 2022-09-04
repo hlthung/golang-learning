@@ -12,10 +12,6 @@ lint: linter
 linter:
 	@sh ./scripts/install_golangci.sh $(BIN_DIR)
 
-lint-fix: linter install-tools
+lint-fix: linter
 	goimports -w $$(go list -f {{.Dir}} ./... | grep -v /vendor/)
 	$(BIN_DIR)/golangci-lint run --fix ./...
-
-install-tools:
-	@echo "Installing Tools from tools.go"
-	@go list -f '{{join .Imports "\n"}}' ./tools.go | xargs  go install
