@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 )
 
 func RequireFileContent(filename string) string {
-	content, err := ioutil.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
@@ -17,7 +16,7 @@ func RequireFileContent(filename string) string {
 }
 
 func RequireFileReader(filename string) io.Reader {
-	content, err := ioutil.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
@@ -25,7 +24,7 @@ func RequireFileReader(filename string) io.Reader {
 }
 
 func RequireTempFile() (f *os.File, cleanup func()) {
-	destinationFile, err := ioutil.TempFile("", "test_*.txt")
+	destinationFile, err := os.CreateTemp("", "test_*.txt")
 	if err != nil {
 		panic(fmt.Errorf("failed to create tmp file: %v", err))
 	}

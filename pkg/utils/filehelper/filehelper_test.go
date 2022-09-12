@@ -3,7 +3,6 @@ package filehelper
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"testing"
@@ -63,7 +62,7 @@ func TestSafeRemoveFileIfExist(t *testing.T) {
 
 		assert.NoFileExists(t, file.Name())
 
-		dir, err := ioutil.ReadDir(path.Dir(file.Name()) + "/.deleted")
+		dir, err := os.ReadDir(path.Dir(file.Name()) + "/.deleted")
 		if !assert.NoError(t, err) {
 			return
 		}

@@ -29,7 +29,6 @@ linters:
     - gocyclo          # enforce limit on cyclomatic complexity
     - bodyclose        # ensure that http requests body is closed https://github.com/timakin/bodyclose
     - depguard         # checks package imports are in a list of acceptable packages
-    - deadcode         # deadcode is a very simple utility which detects unused declarations in a Go package.
     - dogsled          # find assignments/declarations with too many blank identifiers (e.g. x, _, _, _, := f()). https://github.com/alexkohler/dogsled
     - gosimple         # simplify code (common constructs)
     - goprintffuncname # checks that printf-like functions are named with `f` at the end
@@ -37,10 +36,8 @@ linters:
     - nakedret         # to find naked returns in functions greater than a specified function length. https://github.com/alexkohler/nakedret#purpose
     - nolintlint       # reports ill-formed or insufficient nolint directives
     - staticcheck      # perform lots of static checks: hxttps://staticcheck.io/
-    - structcheck      # finds unused struct fields
     - typecheck        # like the front-end of a Go compiler, parses and type-checks Go code: https://golangci-lint.run/usage/linters/
     - unconvert        # remove unnecessary type conversions
-    - rowserrcheck     # is a static analysis tool which checks whether sql.Rows.Err is correctly checked.
     - revive           # https://github.com/mgechev/revive#revive - golint replacement
     - govet            # https://golang.org/cmd/vet/ no shadowing
     - gosec            # check security vulnerability

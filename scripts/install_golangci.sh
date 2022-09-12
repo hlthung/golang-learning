@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BIN_DIR=$1
-VERSION=1.43.0
+VERSION=1.49.0
 
 if [ -z "$BIN_DIR" ]; then
   echo "1 arg is required: destination directory"

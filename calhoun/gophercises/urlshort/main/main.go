@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+
+	"github.com/hlthung/golang-learning/pkg/utils/httphelper"
 
 	"github.com/hlthung/golang-learning/calhoun/gophercises/urlshort"
 )
@@ -31,7 +34,21 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("Starting the server on :8080")
-	http.ListenAndServe(":8080", yamlHandler)
+
+	//http.ListenAndServe(":8080", yamlHandler)
+
+	// TODO verify this
+	srvCLoser, err := httphelper.ListenAndServeWithClose(":8080", yamlHandler)
+	if err != nil {
+		log.Fatalln("ListenAndServeWithClose Error - ", err)
+	}
+	// Close HTTP Server
+	err = srvCLoser.Close()
+	if err != nil {
+		log.Fatalln("Server Close Error - ", err)
+	}
+
+	log.Println("Server Closed")
 }
 
 func defaultMux() *http.ServeMux {

@@ -9,6 +9,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/hlthung/golang-learning/pkg/utils/httphelper"
+
 	"github.com/hlthung/golang-learning/calhoun/gophercises/cyoa"
 )
 
@@ -50,7 +52,20 @@ func main() {
 	mux.Handle("/", cyoa.NewHandler(story))
 	// Start the server using our ServeMux
 	fmt.Printf("Started server at Port %d\n", *port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), mux))
+	///log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), mux))
+
+	// TODO verify this
+	srvCLoser, err := httphelper.ListenAndServeWithClose(fmt.Sprintf(":%d", *port), mux)
+	if err != nil {
+		log.Fatalln("ListenAndServeWithClose Error - ", err)
+	}
+	// Close HTTP Server
+	err = srvCLoser.Close()
+	if err != nil {
+		log.Fatalln("Server Close Error - ", err)
+	}
+
+	log.Println("Server Closed")
 
 }
 
