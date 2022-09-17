@@ -35,7 +35,8 @@ func get(urlStr string) []string {
 	}
 	base := baseUrl.String()
 
-	return hrefs(resp.Body, base)
+	//return filter(hrefs(resp.Body, base), withSameBase(base))
+	return filterSimple(hrefs(resp.Body, base), base)
 }
 
 func hrefs(r io.Reader, base string) []string {
@@ -51,4 +52,36 @@ func hrefs(r io.Reader, base string) []string {
 		}
 	}
 	return ret
+}
+
+// Alternative 1: from the original solution
+func filter(links []string, keepLink func(string) bool) []string {
+	var ret []string
+	for _, link := range links {
+		if keepLink(link) { // if withSameBase then only keep this link
+			ret = append(ret, link)
+		}
+	}
+	return ret
+}
+
+func withSameBase(baseUrl string) func(string) bool {
+	return func(link string) bool {
+		return strings.HasPrefix(link, baseUrl)
+	}
+}
+
+// Alternative 2: more straightforward way of writing
+func filterSimple(links []string, baseUrl string) []string {
+	var ret []string
+	for _, link := range links {
+		if withSameBaseSimple(link, baseUrl) { // if withSameBase then only keep this link
+			ret = append(ret, link)
+		}
+	}
+	return ret
+}
+
+func withSameBaseSimple(link, baseUrl string) bool {
+	return strings.HasPrefix(link, baseUrl)
 }
