@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/xml"
 	"flag"
 	"fmt"
 	"github.com/hlthung/golang-learning/calhoun/gophercises/link"
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -19,15 +21,36 @@ import (
    6. print out XML
 */
 
+const xmlns = "http://www.sitemaps.org/schemas/sitemap/0.9"
+
+type location struct {
+	Value string `xml:"loc"`
+}
+
+type urlset struct {
+	Urls  []location `xml:"url"`
+	Xmlns string     `xml:"xmlns,attr"`
+}
+
 func main() {
 	urlFlag := flag.String("url", "https://gophercises.com", "the url that you want to build a sitemap for")
 	maxDepth := flag.Int("depth", 3, "the maximum number of links deep to traverse")
 	flag.Parse()
 
 	pages := bfs(*urlFlag, *maxDepth)
-	for _, page := range pages {
-		fmt.Println(page)
+	toXml := urlset{
+		Xmlns: xmlns,
 	}
+	for _, page := range pages {
+		toXml.Urls = append(toXml.Urls, location{page})
+	}
+	fmt.Print(xml.Header)
+	enc := xml.NewEncoder(os.Stdout)
+	enc.Indent("", "  ")
+	if err := enc.Encode(toXml); err != nil {
+		panic(err)
+	}
+	fmt.Println()
 }
 
 type empty struct{}
@@ -67,7 +90,8 @@ func bfs(urlStr string, maxDepth int) []string {
 	nq := map[string]struct{}{
 		urlStr: {},
 	}
-	for i := 0; i <= maxDepth; i++ {
+	// for {
+	for i := 0; i <= maxDepth; i++ { // range loop is fine
 		q, nq = nq, make(map[string]struct{})
 		if len(q) == 0 {
 			break
@@ -79,6 +103,7 @@ func bfs(urlStr string, maxDepth int) []string {
 			}
 			seen[url] = struct{}{} // mark this url as seen
 			for _, link := range get(url) {
+				// if _, ok := seen[link]; !ok { // uncomment this if you want to use infinite for loop (line 93) instead
 				nq[link] = struct{}{}
 			}
 		}
