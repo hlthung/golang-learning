@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"github.com/hlthung/golang-learning/calhoun/gophercises/task/cmd"
+)
 
 // According to Calhoun, Go is awesome for building CLI that distribute to different OS,
 // As Go simply converts / compiles the code into a binary file for any given platform
@@ -13,5 +15,5 @@ import "fmt"
 // It gets compiled directly into a binary file. Because Go does not have the VM, it is faster.
 // But that that VM also helps Java work on more platforms
 func main() {
-	fmt.Println("TODO")
+	cmd.RootCmd.Execute()
 }
