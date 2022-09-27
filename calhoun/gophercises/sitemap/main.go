@@ -4,12 +4,13 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
-	"github.com/hlthung/golang-learning/calhoun/gophercises/link"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/hlthung/golang-learning/calhoun/gophercises/link"
 )
 
 /*
