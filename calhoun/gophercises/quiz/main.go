@@ -60,6 +60,7 @@ func main() {
 			if userInput == "break" {
 				exit("Exiting the program.")
 			} else {
+				// strconv.Atoi => string to int
 				if _, err := strconv.Atoi(userInput); err != nil {
 					fmt.Printf("%q is not a number.\n", userInput)
 				}
