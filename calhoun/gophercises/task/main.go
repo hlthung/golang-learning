@@ -14,6 +14,8 @@ import (
 // This is due to how it is compiled: Go doesn’t rely on a virtual machine to compile its code.
 // It gets compiled directly into a binary file. Because Go does not have the VM, it is faster.
 // But that that VM also helps Java work on more platforms
+
+// cobra command is now cobra-cli (sept 2022)
 func main() {
 	cmd.RootCmd.Execute()
 }
