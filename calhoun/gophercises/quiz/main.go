@@ -56,7 +56,7 @@ func main() {
 			fmt.Println("Time out!")
 			return
 			//break loop
-		case userInput := <-answerChannel: // if we get an answer from answerChannel
+		case userInput := <-answerChannel: // got an answer from answerChannel
 			if userInput == "break" {
 				exit("Exiting the program.")
 			} else {
