@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/hlthung/golang-learning/calhoun/gophercises/task/db"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -12,6 +13,11 @@ var addCmd = &cobra.Command{
 	Short: "Adds a task to your task list.",
 	Run: func(cmd *cobra.Command, args []string) {
 		task := strings.Join(args, " ")
+		_, err := db.CreateTask(task)
+		if err != nil {
+			fmt.Println("Something went wrong:", err)
+			return
+		}
 		fmt.Printf("Added \"%s\" to your task list.\n", task)
 	},
 }
