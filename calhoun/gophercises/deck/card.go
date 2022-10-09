@@ -91,8 +91,23 @@ func absRank(c Card) int {
 	return int(c.Suit)*int(maxRank) + int(c.Rank)
 }
 
+// The nondeterministic Shuffle code
+
+//func Shuffle(cards []Card) []Card {
+//	ret := make([]Card, len(cards))
+//	r := rand.New(rand.NewSource(time.Now().Unix()))
+//	perm := r.Perm(len(cards))
+//	for i, j := range perm {
+//		ret[i] = cards[j]
+//	}
+//	return ret
+//}
+
 var shuffleRand = rand.New(rand.NewSource(time.Now().Unix()))
 
+// Shuffle - deterministic
+// Reason for doing this is to make sure while having the unit test,
+// our test doesn't fail randomly
 func Shuffle(cards []Card) []Card {
 	ret := make([]Card, len(cards))
 	perm := shuffleRand.Perm(len(cards))
