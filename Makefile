@@ -6,6 +6,13 @@ BIN_DIR = bins
 
 default: bins
 
+install-tools:
+	@echo "Installing Tools from tools.go"
+	@go list -f '{{join .Imports "\n"}}' ./tools.go | xargs  go install
+
+generate:
+	go generate ./...
+
 lint: linter
 	$(BIN_DIR)/golangci-lint run ./...
 
