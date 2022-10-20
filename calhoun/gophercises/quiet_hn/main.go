@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/hlthung/golang-learning/calhoun/gophercises/quiet_hn/hn"
@@ -31,9 +32,31 @@ func main() {
 }
 
 func handler(numStories int, tpl *template.Template) http.HandlerFunc {
+	sc := storyCache{
+		numStories: numStories,
+		duration:   6 * time.Second,
+	}
+
+	// sc.refresh(numStories) // can do this?
+	go func() {
+		ticker := time.NewTicker(3 * time.Second)
+		for {
+			temp := storyCache{
+				numStories: numStories,
+				duration:   6 * time.Second,
+			}
+			temp.stories()
+			sc.mutex.Lock()
+			sc.cache = temp.cache
+			sc.expiration = temp.expiration
+			sc.mutex.Unlock()
+			<-ticker.C
+		}
+	}()
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		stories, err := getTopStories(numStories)
+		stories, err := sc.stories()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -49,6 +72,47 @@ func handler(numStories int, tpl *template.Template) http.HandlerFunc {
 		}
 	})
 }
+
+type storyCache struct {
+	numStories int
+	cache      []item
+	expiration time.Time
+	duration   time.Duration
+	mutex      sync.Mutex
+}
+
+func (sc *storyCache) stories() ([]item, error) {
+	sc.mutex.Lock()
+	defer sc.mutex.Unlock()
+	if time.Now().Sub(sc.expiration) < 0 {
+		return sc.cache, nil
+	}
+	stories, err := getTopStories(sc.numStories)
+	if err != nil {
+		return nil, err
+	}
+	sc.expiration = time.Now().Add(sc.duration)
+	sc.cache = stories
+	return sc.cache, nil
+}
+
+//func (sc *storyCache) refresh(numStories int) {
+//	go func() {
+//		ticker := time.NewTicker(3 * time.Second)
+//		for {
+//			temp := storyCache{
+//				numStories: numStories,
+//				duration:   6 * time.Second,
+//			}
+//			temp.stories()
+//			sc.mutex.Lock()
+//			sc.cache = temp.cache
+//			sc.expiration = temp.expiration
+//			sc.mutex.Unlock()
+//			<-ticker.C
+//		}
+//	}()
+//}
 
 func getTopStories(numStories int) ([]item, error) {
 	var client hn.Client
@@ -67,7 +131,6 @@ func getTopStories(numStories int) ([]item, error) {
 }
 
 func getStories(ids []int) []item {
-	var client hn.Client
 	type result struct {
 		idx  int
 		item item
@@ -76,6 +139,7 @@ func getStories(ids []int) []item {
 	resultCh := make(chan result)
 	for i := 0; i < len(ids); i++ {
 		go func(idx, id int) {
+			var client hn.Client
 			hnItem, err := client.GetItem(id)
 			if err != nil {
 				resultCh <- result{idx: idx, err: err}
