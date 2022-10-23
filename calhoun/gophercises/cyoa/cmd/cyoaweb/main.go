@@ -9,9 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hlthung/golang-learning/pkg/utils/httphelper"
-
 	"github.com/hlthung/golang-learning/calhoun/gophercises/cyoa"
+	"github.com/hlthung/golang-learning/pkg/utils/httphelper"
 )
 
 // go build . && go run cmd/cyoaweb/main.go

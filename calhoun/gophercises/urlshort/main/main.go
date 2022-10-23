@@ -5,9 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/hlthung/golang-learning/pkg/utils/httphelper"
-
 	"github.com/hlthung/golang-learning/calhoun/gophercises/urlshort"
+	"github.com/hlthung/golang-learning/pkg/utils/httphelper"
 )
 
 // Ex2 From https://github.com/gophercises/urlshort
