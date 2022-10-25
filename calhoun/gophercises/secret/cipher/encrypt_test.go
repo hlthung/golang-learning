@@ -1,4 +1,4 @@
-package encrypt
+package cipher
 
 import (
 	"testing"
@@ -28,6 +28,18 @@ const (
 	`
 )
 
+func GetOpts(key string, backupKeys []string) Options {
+	keys := make([][]byte, len(backupKeys))
+	for i, v := range backupKeys {
+		keys[i] = []byte(v)
+	}
+	opts := Options{
+		EncryptionKey:        []byte(key),
+		EncryptionBackupKeys: keys,
+	}
+	return opts
+}
+
 func getNewAESEncryptionService(developmentEncryptionStringKey string) *AESEncryptionServiceV1 {
 	aesService, _ := newAESEncryptionServiceV1(GetOpts(developmentEncryptionStringKey, nil))
 	return aesService
@@ -40,7 +52,7 @@ func getNewAESEncryptionMultiKeysService(keys []string) *AESEncryptionServiceV1 
 
 func TestBasicEncryptAndDecryptByteArray(t *testing.T) {
 	aesEncryptionService := getNewAESEncryptionService(developmentEncryptionStringKey)
-	// encrypt string
+	// cipher string
 	encryptedBytes, _ := aesEncryptionService.Encrypt([]byte(testString))
 	// decrypt string back to what it was
 	decryptedBytes, _ := aesEncryptionService.Decrypt(encryptedBytes)
@@ -49,7 +61,7 @@ func TestBasicEncryptAndDecryptByteArray(t *testing.T) {
 
 func TestHandleEmptyStringEncryptAndDecryptString(t *testing.T) {
 	aesEncryptionService := getNewAESEncryptionService(developmentEncryptionStringKey)
-	// encrypt string
+	// cipher string
 	encryptedBytes, err := aesEncryptionService.Encrypt([]byte(emptyString))
 	assert.Equal(t, err, nil)
 
@@ -75,7 +87,7 @@ func TestCanDecryptOnNewAesInstanceByteArray(t *testing.T) {
 
 func TestWeirdCharsEncryptAndDecryptByteArray(t *testing.T) {
 	aesEncryptionService := getNewAESEncryptionService(developmentEncryptionStringKey)
-	// encrypt string
+	// cipher string
 	encryptedBytes, _ := aesEncryptionService.Encrypt([]byte(weirdCharsString))
 	// decrypt string back to what it was
 	decryptedBytes, _ := aesEncryptionService.Decrypt(encryptedBytes)

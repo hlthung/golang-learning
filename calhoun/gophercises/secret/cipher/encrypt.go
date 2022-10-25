@@ -1,4 +1,4 @@
-package encrypt
+package cipher
 
 import (
 	"crypto/aes"
@@ -12,7 +12,7 @@ import (
 )
 
 type Options struct {
-	// EncryptionKey is the encryption key used to encrypt the payloads
+	// EncryptionKey is the encryption key used to cipher the payloads
 	// this key must be 16, 24, 32 characters in length
 	// https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
 	EncryptionKey        []byte
@@ -77,7 +77,7 @@ func (a AESEncryptionServiceV1) Encrypt(unencryptedBytes []byte) ([]byte, error)
 }
 
 // Decrypt takes an encrypted base64 byte array then
-// returns an unencrypted byte array if same key was used to encrypt it
+// returns an unencrypted byte array if same key was used to cipher it
 func (a AESEncryptionServiceV1) Decrypt(encryptedBytes []byte) ([]byte, error) {
 	if len(encryptedBytes) == 0 {
 		return []byte(""), nil
