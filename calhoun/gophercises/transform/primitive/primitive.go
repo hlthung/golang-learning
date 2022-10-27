@@ -11,6 +11,9 @@ import (
 	"strings"
 )
 
+// This exercise is based on fogleman/primitive
+// see: https://github.com/fogleman/primitive
+
 // Mode defines the shapes used when transforming images.
 type Mode int
 
