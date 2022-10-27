@@ -23,6 +23,14 @@ func main() {
 		}
 	}()
 
+	path := "./img"
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(path, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		html := `<html><body>
@@ -100,7 +108,7 @@ func renderNumShapeChoices(w http.ResponseWriter, r *http.Request, rs io.ReadSee
 	}
 	imgs, err := genImages(rs, ext, opts...)
 	if err != nil {
-		panic(err)
+		// panic(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -141,7 +149,7 @@ func renderModeChoices(w http.ResponseWriter, r *http.Request, rs io.ReadSeeker,
 	}
 	imgs, err := genImages(rs, ext, opts...)
 	if err != nil {
-		panic(err)
+		// panic(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
