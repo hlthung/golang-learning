@@ -62,10 +62,10 @@ func main() {
 	// Top Maroon Banner
 	pdf.SetFillColor(103, 60, 79)
 	pdf.Polygon([]gofpdf.PointType{
-		{0, 0},
-		{w, 0},
-		{w, bannerHt},
-		{0, bannerHt * 0.9},
+		{X: 0, Y: 0},
+		{X: w, Y: 0},
+		{X: w, Y: bannerHt},
+		{X: 0, Y: bannerHt * 0.9},
 	}, "F")
 	pdf.Polygon([]gofpdf.PointType{
 		{0, h},
